@@ -6,11 +6,11 @@ class Hello
     include Cinch::Plugin
 
     # Define the help method
-    match /help$/, method: :help
-    def help(m, user)
+    match(/help$/, method: :help)
+    def help(m)
         help_text = File.open("helptext.txt", "r")
-        user.send "Hi, my name is lujan-bot!"
-        user.send help_text
+        m.user.send "Hi, #{m.user.name} my name is lujan-bot!"
+        m.user.send help_text
         help_text.close
     end
 end
