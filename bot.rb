@@ -9,8 +9,11 @@ class Hello
     match(/help$/, method: :help)
     def help(m)
         help_text = File.open("helptext.txt", "r")
-        m.user.send "Hi, #{m.user.name} my name is lujan-bot!"
-        m.user.send help_text
+        m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan!"
+        # Send the help text line by line
+        help_text.each_line do |line|
+            m.user.send line
+        end
         help_text.close
     end
 end
