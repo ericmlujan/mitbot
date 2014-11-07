@@ -5,6 +5,7 @@ bot = Cinch::Bot.new do
     configure do |c|
         c.server = "irc.freenode.net"
         c.channels = ["#lujan"]
+        c.nick = "lujan-bot"
     end
 end
 
