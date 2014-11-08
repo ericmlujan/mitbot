@@ -89,7 +89,7 @@ bot = Cinch::Bot.new do
         c.nick = "lujan-bot"
         c.realname = "Eric Lujan's IRC Channel Support Bot"
         c.user = "ircservices"
-        c.plugins.plugins = [Hello]
+        c.plugins.plugins = [Hello, GitHub]
     end
 end
 
