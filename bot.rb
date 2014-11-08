@@ -35,8 +35,8 @@ end
 class GitHub
     include Cinch::Plugin
     # Define some info about the GitHub API
-    base_url = "api.github.com"
-    user = "ericluwolf"
+    BaseURL = "api.github.com"
+    User = "ericluwolf"
 
     # Match commands to their individual methods
     # !gh commit <repository> <id>
@@ -44,7 +44,7 @@ class GitHub
 
     # Define a way to search for Git commits by ID
     def commit_search(m, repo, id)
-        uri = "/repos/#{user}/#{repo}/commits/#{id}"
+        uri = "/repos/#{User}/#{repo}/commits/#{id}"
         # Request the commit from GitHub and store the info
         res = request(uri, Net::HTTP::Get)
         if res
