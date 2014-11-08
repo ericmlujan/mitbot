@@ -38,6 +38,10 @@ class GitHub
     base_url = "api.github.com"
     user = "ericluwolf"
 
+    # Match commands to their individual methods
+    # !gh commit <repository> <id>
+    match(/gh commit ([^ ]+) (.+)/, method: :commit_search)
+
     # Define a way to search for Git commits by ID
     def commit_search(m, repo, id)
         uri = "/repos/#{user}/#{repo}/commits/#{id}"
