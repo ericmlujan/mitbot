@@ -1,6 +1,8 @@
 require 'cinch'
+require 'net/http'
+require 'json'
 
-# Plugin definition
+# Basic plugin definition
 class Hello
     # Pull in dem dependencies
     include Cinch::Plugin
@@ -27,6 +29,52 @@ class Hello
     def ping(m)
         m.reply "Pong!"
     end
+end
+
+# GitHub plugin definition
+class GitHub
+    include Cinch::Plugin
+    # Define some info about the GitHub API
+    base_url = "api.github.com"
+    user = "ericluwolf"
+
+    # Define a way to search for Git commits by ID
+    def commit_search(m, repo, id)
+        uri = "/repos/#{user}/#{repo}/commits/#{id}"
+        # Request the commit from GitHub and store the info
+        res = request(uri, Net::HTTP::Get)
+        if res
+            m.reply "Git commit query for commit #{id}"
+            m.reply "================================================="
+            m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
+            m.reply "Commit date: #{res["commit"]["author"]["date"]}"
+            m.reply "Commit message: #{res["commit"]["message"]}"
+            m.reply "Modified file listing:"
+            # Iterate through all file statistics
+            res["files"].each do |file|
+                m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
+            end
+        end
+    end
+
+    # Define a generic method to communicate with GitHub's API
+    private
+    def request(uri, method, data = nil)
+        uri = URI("https://#{BaseURL}#{uri}")
+        # Create an HTTP requst
+        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+            req = method.new(uri.request_uri)
+            req.body = data
+            # Do the request and read the JSON into a variable
+            resp = http.request(req)
+            # Parse the JSON and return it as an object
+            return JSON.parse(resp.body)
+        end
+    end
+
+    # Match commands to their methods
+
+    # 
 end
 
 # Set some basic configuration and define the bot object.
