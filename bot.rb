@@ -48,34 +48,27 @@ class GitHub
     def commit_latest(m, repo)
       uri = "/repos/#{User}/#{repo}/commits" 
       res = request(uri, Net::HTTP::Get)
-      if res["message"] != "Not Found"
-          m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
-          commit_search(m, repo, res["sha"])
-      else
-          m.reply "Repository #{User}/#{repo} not found."
+        m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
+        commit_search(m, repo, res["sha"])
       end
     end
 
     # Define a way to search for Git commits by ID
     def commit_search(m, repo, id)
-        uri = "/repos/#{User}/#{repo}/commits/#{id}"
-        # Request the commit from GitHub and store the info
-        res = request(uri, Net::HTTP::Get)
-        if res["message"] != "Not Found"
-            m.reply "Git commit query for commit #{id}"
-            m.reply " "
-            m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
-            m.reply "Commit date: #{res["commit"]["author"]["date"]}"
-            m.reply "Commit message: #{res["commit"]["message"]}"
-            m.reply "Modified file listing:"
-            m.reply " "
-            # Iterate through all file statistics
-            res["files"].each do |file|
-                m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
-            end
-        else
-            m.reply "Commit #{id} not found in #{User}/#{repo}."
-        end
+      uri = "/repos/#{User}/#{repo}/commits/#{id}"
+      # Request the commit from GitHub and store the info
+      res = request(uri, Net::HTTP::Get)
+      m.reply "Git commit query for commit #{id}"
+      m.reply " "
+      m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
+      m.reply "Commit date: #{res["commit"]["author"]["date"]}"
+      m.reply "Commit message: #{res["commit"]["message"]}"
+      m.reply "Modified file listing:"
+      m.reply " "
+      # Iterate through all file statistics
+      res["files"].each do |file|
+          m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
+      end
     end
 
     # Define a generic method to communicate with GitHub's API
