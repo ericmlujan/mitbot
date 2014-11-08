@@ -48,7 +48,7 @@ class GitHub
     def commit_latest(m, repo)
       uri = "/repos/#{User}/#{repo}/commits" 
       res = request(uri, Net::HTTP::Get)
-      if res["sha"]
+      if res["message"] != "Not Found"
           m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
           commit_search(m, repo, res["sha"])
       else
