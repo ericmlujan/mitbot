@@ -91,7 +91,7 @@ bot = Cinch::Bot.new do
         c.channels = ["#lujan"]
         c.nick = "lujan-bot"
         c.realname = "Eric Lujan's IRC Channel Support Bot"
-        c.user = "ircservices"
+        c.user = "ircbotd"
         c.plugins.plugins = [Hello, GitHub]
     end
 end
