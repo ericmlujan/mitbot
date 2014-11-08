@@ -39,6 +39,7 @@ class GitHub
     User = "ericluwolf"
 
     # Match commands to their individual methods
+    
     # !gh commit <repository> <id>
     match(/gh commit ([^ ]+) (.+)/, method: :commit_search)
 
@@ -75,10 +76,6 @@ class GitHub
             return JSON.parse(resp.body)
         end
     end
-
-    # Match commands to their methods
-
-    # 
 end
 
 # Set some basic configuration and define the bot object.
