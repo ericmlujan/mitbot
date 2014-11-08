@@ -5,10 +5,13 @@ class Hello
     # Pull in dem dependencies
     include Cinch::Plugin
 
-    # Define the help method
+    # Define string patterns and their corresponding methods
     match(/help$/, method: :help)
     def help(m)
-        help_text = File.open("helptext.txt", "r")
+        # Open the current file in the current directory
+        pwd = File.dirname( File.expand_path(__FILE__))
+        file = pwd + "/helptext.txt"
+        help_text = File.open(file, "r")
         m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan!"
         # Send the help text line by line
         help_text.each_line do |line|

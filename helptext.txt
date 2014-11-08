@@ -1,11 +1,7 @@
-This is the help text for lujan-bot.
-This text can be sent to you via private message by typing !help in a chat room where lujan-bot is present.
+This help text can be sent to you via private message by typing !help in a chat room where lujan-bot is present.
 
 Here's a list of each command you can type, followed by a small description of how to use it:
 
-!help
-Displays this help text.
-
-End of command listing.
+!help - Displays this help text.
 
 NOTE: lujan-bot is a work-in-progress. Please send feature requests and love letters to eric@lujan.io.

@@ -2,9 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     cinch (2.1.0)
+    daemons (1.1.9)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   cinch
+  daemons
