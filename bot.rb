@@ -48,9 +48,8 @@ class GitHub
     def commit_latest(m, repo)
       uri = "/repos/#{User}/#{repo}/commits" 
       res = request(uri, Net::HTTP::Get)
-        m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
-        commit_search(m, repo, res["sha"])
-      end
+      m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
+      commit_search(m, repo, res["sha"])
     end
 
     # Define a way to search for Git commits by ID
