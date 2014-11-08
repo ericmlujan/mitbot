@@ -46,7 +46,7 @@ class GitHub
 
     # Define a way to search for the lastest commit in a repository
     def commit_latest(m, repo)
-      uri = "/repos/#{user}/#{repo}/commits" 
+      uri = "/repos/#{User}/#{repo}/commits" 
       res = request(uri, Net::HTTP::Get)
       if res["sha"]
           m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
