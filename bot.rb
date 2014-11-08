@@ -61,7 +61,7 @@ class GitHub
         uri = "/repos/#{User}/#{repo}/commits/#{id}"
         # Request the commit from GitHub and store the info
         res = request(uri, Net::HTTP::Get)
-        if res["sha"]
+        if res["message"] != "Not Found"
             m.reply "Git commit query for commit #{id}"
             m.reply " "
             m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
