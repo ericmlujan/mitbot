@@ -41,23 +41,38 @@ class GitHub
     # Match commands to their individual methods
     # !gh commit <repository> <id>
     match(/gh commit ([^ ]+) (.+)/, method: :commit_search)
+    match(/gh commit ([^ ]+)/, method: :commit_latest)
+
+    # Define a way to search for the lastest commit in a repository
+    def commit_latest(m, repo)
+       uri = "/repos/#{user}/#{repo}/commits" 
+       res = request(uri, Net::HTTP::Get)
+       if res["sha"]
+        m.reply "The latest commit on #{User}/#{repo} is #{res["sha"]}"
+        commit_search(m, repo, res["sha"])
+       else
+        m.reply "Repository #{User}/#{repo} not found."
+    end
 
     # Define a way to search for Git commits by ID
     def commit_search(m, repo, id)
         uri = "/repos/#{user}/#{repo}/commits/#{id}"
         # Request the commit from GitHub and store the info
         res = request(uri, Net::HTTP::Get)
-        if res
+        if res["sha"]
             m.reply "Git commit query for commit #{id}"
-            m.reply "================================================="
+            m.reply " "
             m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
             m.reply "Commit date: #{res["commit"]["author"]["date"]}"
             m.reply "Commit message: #{res["commit"]["message"]}"
             m.reply "Modified file listing:"
+            m.reply " "
             # Iterate through all file statistics
             res["files"].each do |file|
                 m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
             end
+        else
+            m.reply "Commit #{id} not found in #{User}/#{repo}."
         end
     end
 
