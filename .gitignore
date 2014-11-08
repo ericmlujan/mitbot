@@ -36,3 +36,4 @@ build/
 # Log and output files
 *.log
 *.output
+*.pid
