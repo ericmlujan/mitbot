@@ -7,6 +7,9 @@ class Hello
 
     # Define string patterns and their corresponding methods
     match(/help$/, method: :help)
+    match(/ping$/, method: :ping)
+
+    # Define the help method
     def help(m)
         # Open the current file in the current directory
         pwd = File.dirname( File.expand_path(__FILE__))
@@ -18,6 +21,11 @@ class Hello
             m.user.send line
         end
         help_text.close
+    end
+
+    # Define the test method for ping
+    def ping(m)
+        m.reply "Pong!"
     end
 end
 
