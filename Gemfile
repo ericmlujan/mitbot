@@ -5,3 +5,6 @@ gem 'cinch'
 
 # System daemonization helper
 gem 'daemons'
+
+# Weather
+gem 'forecast_io'

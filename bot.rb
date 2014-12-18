@@ -1,6 +1,29 @@
 require 'cinch'
 require 'net/http'
 require 'json'
+require 'time'
+require 'forecast_io'
+
+# Calculate differences in times
+class Numeric
+  def duration
+    sec = self.to_i
+    min = sec / 60
+    hr = min / 60
+    day = hr / 24
+    if day > 0
+      "#{day} days and #{hr % 24} hours"
+    elsif hr > 0
+      "#{hr} hours and #{min % 60} minutes"
+    elsif min > 0
+      "#{min} minutes and #{sec % 60} seconds"
+    elsif sec >= 0
+      "#{sec} seconds"
+    else
+      "It's here!"
+    end
+  end
+end
 
 # Basic plugin definition
 class Hello
@@ -17,7 +40,7 @@ class Hello
         pwd = File.dirname( File.expand_path(__FILE__))
         file = pwd + "/helptext.txt"
         help_text = File.open(file, "r")
-        m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan!"
+        m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan on behalf of the MIT Class of 2019!"
         # Send the help text line by line
         help_text.each_line do |line|
             m.user.send line
@@ -27,73 +50,77 @@ class Hello
 
     # Define the test method for ping
     def ping(m)
-        m.reply "Pong!"
+        m.reply "Tim the Beaver here, reporting for duty!"
     end
 end
 
-# GitHub plugin definition
-class GitHub
-    include Cinch::Plugin
-    # Define some info about the GitHub API
-    BaseURL = "api.github.com"
-    User = "ericluwolf"
+# Class for MIT-specific stuff
+class MIT
+  # Moar dependencies
+  include Cinch::Plugin
 
-    # Match commands to their individual methods
-    
-    # !gh commit <repository> <id>
-    match(/gh commit ([^ ]+) (.+)/, method: :commit_search)
-    match(/gh commit ([^ ]+)/, method: :commit_latest)
+  # Set listeners
+  match(/illuminati$/, method: :illuminati)
+  match(/fact$/, method: :fact)
+  match(/cpw$/, method: :cpw)
+  match(/weather$/, method: :weather)
 
-    # Define a way to search for the lastest commit in a repository
-    def commit_latest(m, repo)
-      uri = "/repos/#{User}/#{repo}/commits" 
-      res = request(uri, Net::HTTP::Get)
-      m.reply "The latest commit on #{User}/#{repo} is #{res[0]["sha"]}"
-      commit_search(m, repo, res[0]["sha"])
-    end
+  # Confirm that the illuminati exists
+  def illuminati(m)
+    m.reply "MIT has three letters. Illuminati has three I's. Illuminati confirmed."
+  end
 
-    # Define a way to search for Git commits by ID
-    def commit_search(m, repo, id)
-      uri = "/repos/#{User}/#{repo}/commits/#{id}"
-      # Request the commit from GitHub and store the info
-      res = request(uri, Net::HTTP::Get)
-      m.reply "Git commit query for commit #{id} on #{User}/#{repo}"
-      m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
-      m.reply "Commit date: #{res["commit"]["author"]["date"]}"
-      m.reply "Commit message: #{res["commit"]["message"]}"
-      m.reply "Modified file listing:"
-      # Iterate through all file statistics
-      res["files"].each do |file|
-          m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
-      end
-    end
+  # Display a random MIT fact
+  def fact(m)
+    # Open the current file in the current directory
+    pwd = File.dirname( File.expand_path(__FILE__))
+    file = pwd + "/mitfacts.txt"
+    fact = File.readlines(file).sample
+    m.reply fact
+  end
 
-    # Define a generic method to communicate with GitHub's API
-    private
-    def request(uri, method, data = nil)
-        uri = URI("https://#{BaseURL}#{uri}")
-        # Create an HTTP requst
-        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-            req = method.new(uri.request_uri)
-            req.body = data
-            # Do the request and read the JSON into a variable
-            resp = http.request(req)
-            # Parse the JSON and return it as an object
-            return JSON.parse(resp.body)
-        end
-    end
+  # Show time until CPW
+  def cpw(m)
+    cpwtime = 1429142400
+    now = Time.now.to_i
+    diff = (cpwtime - now).duration
+    m.reply "There are #{diff} until the first day of MIT CPW."
+  end
+
+  # Get weather in Cambridge
+  def weather(m)
+    ForecastIO.api_key = "8826650e770499ac02d3d72d17afd3c8"
+    forecast = ForecastIO.forecast(42.3598, -71.0921)
+    humidity = (forecast.currently.humidity) * 100
+    response = forecast.currently.summary + ", with a temperature of " + forecast.currently.temperature.to_s + " and humidity of " + humidity.to_s + "%."
+    m.reply "Current weather at MIT (Kendall/MIT, Cambridge, MA):"
+    m.reply response
+  end
+
 end
+
 
 # Set some basic configuration and define the bot object.
 bot = Cinch::Bot.new do
     configure do |c|
+        pwd = File.dirname( File.expand_path(__FILE__))
+        cred = File.open(pwd + "/credfile", &:readline)
         c.server = "irc.freenode.net"
-        c.channels = ["#lujan"]
-        c.nick = "lujan-bot"
-        c.realname = "Eric Lujan's IRC Channel Support Bot"
-        c.user = "ircbotd"
-        c.plugins.plugins = [Hello, GitHub]
+        c.channels = ["#mit2019"]
+        c.nick = "mitbot"
+        c.realname = "Tim the Beaver"
+        c.user = "mit"
+        c.password = cred
+        c.plugins.plugins = [Hello, MIT]
     end
+
+    on :message do |m|
+    msg = m.message.downcase
+    words = ['illuminati', 'triangle', 'conspiracy', 'three', 'confirmed', 'secret', 'society', 'chris', 'peterson']
+    if (words.any? { |word| msg.include? word })
+      m.reply "Did you hear that?!!!!! Illuminati confirmed by #{m.user.name}!"
+    end
+  end
 end
 
 # Let it run!

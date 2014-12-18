@@ -1,11 +1,11 @@
-This help text can be sent to you via private message by typing !help in a chat room where lujan-bot is present.
+This help text can be sent to you via private message by typing !help in a chat room where mitbot is present.
 
 Here's a list of each command you can type, followed by a small description of how to use it:
   
-!help - Displays this help text.
-!ping - Pongs you back.
-!gh commit <repo> - Displays the latest commit in one of Eric's GitHub repositories
-!gh commit <repo> <id> - Displays info for a specific commit in one of Eric's GitHub repositories
-  
+!help    - Displays this help text.
+!ping    - Pongs you back.
+!fact    - Displays a random MIT fact.
+!cpw     - Tells you the time until CPW.
+!weather - Displays the current weather at MIT.
 
-NOTE: lujan-bot is a work-in-progress. Please send feature requests and love letters to eric@lujan.io.
+NOTE: mitbot is a work in progress. Please send feature requests and love letters to eric@lujan.io.

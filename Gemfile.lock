@@ -3,6 +3,15 @@ GEM
   specs:
     cinch (2.1.0)
     daemons (1.1.9)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
+    forecast_io (2.0.0)
+      faraday
+      hashie
+      multi_json
+    hashie (3.3.2)
+    multi_json (1.10.1)
+    multipart-post (2.0.0)
 
 PLATFORMS
   ruby
@@ -10,3 +19,4 @@ PLATFORMS
 DEPENDENCIES
   cinch
   daemons
+  forecast_io
