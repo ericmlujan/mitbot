@@ -7,7 +7,7 @@ file = pwd + "/bot.rb"
 
 # Set some options
 options = {
-	:app_name    =>"ircbotd",
+	:app_name    =>"mitbotd",
 	:multiple   => true,
 	:mode       => :load,
 	:log_output => true,
@@ -15,6 +15,6 @@ options = {
 }
 
 # Run the bot and daemonize it
-Daemons.run_proc('ircbotd',options) do
+Daemons.run_proc('mitbotd',options) do
 	exec "ruby #{file}"
 end
