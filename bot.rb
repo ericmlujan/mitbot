@@ -64,6 +64,7 @@ class MIT
   match(/fact$/, method: :fact)
   match(/cpw$/, method: :cpw)
   match(/weather$/, method: :weather)
+  match(/course$/, method: :course)
 
   # Confirm that the illuminati exists
   def illuminati(m)
@@ -97,6 +98,68 @@ class MIT
     m.reply response
   end
 
+  def course(m, number)
+    reply = ""
+    number = number.downcase
+    case number
+    when "1"
+      reply = "Civil and Environmental Engineering"
+    when "2"
+      reply = "Mechanical Engineering"
+    when "3"
+      reply = "Materials Science"
+    when "4"
+      reply = "Architecture"
+    when "5"
+      reply = "Chemistry"
+    when "6"
+      reply = "Computer Enginnering and Computer Science"
+    when "7"
+      reply = "Biology"
+    when "8"
+      reply = "Physics"
+    when "9"
+      reply = "Brain and Cognitive Sciences"
+    when "10"
+      reply = "Chemical Engineering"
+    when "11"
+      reply = "Urban Studies and Planning"
+    when "12"
+      reply = "Earth, Atmospheric, and Planetary Sciences"
+    when "14"
+      reply = "Economics"
+    when "15"
+      reply = "Management"
+    when "16"
+      reply = "AeroAstro"
+    when "17"
+      reply = "Political Science"
+    when "18"
+      reply = "Mathematics"
+    when "20"
+      reply = "Biological Engineering"
+    when "21"
+      reply = "Humanities"
+    when "22"
+      reply = "Nuclear Science and Engineering"
+    when "24"
+      reply = "Lingusitics and Philosophy"
+    when "cms"
+      reply = "Comparative Media Studies"
+    when "csb"
+      reply = "Computational and Systems Biology"
+    when "esd"
+      reply = "Engineering Systems"
+    when "hst"
+      reply = "Health Sciences and Technology"
+    when "mas"
+      reply = "Media Arts and Studies"
+    when "sts"
+      reply = "Science, Technology, and Society"
+    else 
+      reply = "I don't recognize that course number or acronym"
+    end
+    m.reply reply 
 end
 
 
