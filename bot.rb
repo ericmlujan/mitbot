@@ -178,10 +178,10 @@ class MIT
       reply = "Media Arts and Studies"
     when "sts"
       reply = "Science, Technology, and Society"
-    else 
+    else
       reply = "I don't recognize that course number or acronym"
     end
-    m.reply reply 
+    m.reply reply
 end
 
 
