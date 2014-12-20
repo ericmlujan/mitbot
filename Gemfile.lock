@@ -1,7 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    capistrano (3.3.5)
+      capistrano-stats (~> 1.1.0)
+      i18n
+      rake (>= 10.0.0)
+      sshkit (~> 1.3)
+    capistrano-stats (1.1.1)
     cinch (2.1.0)
+    colorize (0.7.5)
     daemons (1.1.9)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
@@ -10,13 +17,23 @@ GEM
       hashie
       multi_json
     hashie (3.3.2)
+    i18n (0.7.0)
     multi_json (1.10.1)
     multipart-post (2.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.1)
+    rake (10.4.2)
+    sshkit (1.6.1)
+      colorize (>= 0.7.0)
+      net-scp (>= 1.1.2)
+      net-ssh (>= 2.8.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  capistrano (~> 3.3.0)
   cinch
   daemons
   forecast_io
