@@ -27,31 +27,63 @@ end
 
 # Basic plugin definition
 class Hello
-    # Pull in dem dependencies
-    include Cinch::Plugin
+  # Pull in dem dependencies
+  include Cinch::Plugin
 
-    # Define string patterns and their corresponding methods
-    match(/help$/, method: :help)
-    match(/ping$/, method: :ping)
+  # Define string patterns and their corresponding methods
+  match(/help$/, method: :help)
+  match(/ping$/, method: :ping)
+  match(/gitstatus$/, method: :gitstatus)
+  match(/source$/, method: :source)
 
-    # Define the help method
-    def help(m)
-        # Open the current file in the current directory
-        pwd = File.dirname( File.expand_path(__FILE__))
-        file = pwd + "/helptext.txt"
-        help_text = File.open(file, "r")
-        m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan on behalf of the MIT Class of 2019!"
-        # Send the help text line by line
-        help_text.each_line do |line|
-            m.user.send line
-        end
-        help_text.close
+  # Define the help method
+  def help(m)
+    # Open the current file in the current directory
+    pwd = File.dirname( File.expand_path(__FILE__))
+    file = pwd + "/helptext.txt"
+    help_text = File.open(file, "r")
+    m.user.send "Hi, #{m.user.name}! I'm a helpful IRC bot coded by Eric Lujan on behalf of the MIT Class of 2019!"
+    # Send the help text line by line
+    help_text.each_line do |line|
+      m.user.send line
     end
+    help_text.close
+  end
 
-    # Define the test method for ping
-    def ping(m)
-        m.reply "Tim the Beaver here, reporting for duty!"
+  # Define the test method for ping
+  def ping(m)
+    m.reply "Tim the Beaver here, reporting for duty!"
+  end
+
+  def source(m)
+    file = File.expand_path(__FILE__)
+    source_text = File.open(file, "r")
+    source_text.each_line do |line|
+      m.user.send line
     end
+    source_text.close
+  end
+
+  def gitstatus(m)
+    begin
+      show_text = `git show -s`
+      unless $? == 0
+        m.user.send "error running git"
+      end
+      status_text = `git status`
+      unless $? == 0
+        m.user.send "error running git"
+      end
+      show_text.each_line do |line|
+        m.user.send line
+      end
+      status_text.each_line do |line|
+        m.user.send line
+      end
+    rescue
+      m.user.send "no git program"
+    end
+  end
 end
 
 # Class for MIT-specific stuff
@@ -64,7 +96,7 @@ class MIT
   match(/fact$/, method: :fact)
   match(/cpw$/, method: :cpw)
   match(/weather$/, method: :weather)
-  match(/course ([^ ]+)/, method: :course)
+  match(/course (.+)$/, method: :course)
 
   # Confirm that the illuminati exists
   def illuminati(m)
@@ -187,19 +219,19 @@ end
 
 # Set some basic configuration and define the bot object.
 bot = Cinch::Bot.new do
-    configure do |c|
-        pwd = File.dirname( File.expand_path(__FILE__))
-        cred = File.open(pwd + "/credfile", &:readline)
-        c.server = "irc.freenode.net"
-        c.channels = ["#mit2019"]
-        c.nick = "mitbot"
-        c.realname = "Tim the Beaver"
-        c.user = "mit"
-        c.password = cred
-        c.plugins.plugins = [Hello, MIT]
-    end
+  configure do |c|
+    pwd = File.dirname( File.expand_path(__FILE__))
+    cred = File.open(pwd + "/credfile", &:readline)
+    c.server = "irc.freenode.net"
+    c.channels = ["#mit2019"]
+    c.nick = "mitbot"
+    c.realname = "Tim the Beaver"
+    c.user = "mit"
+    c.password = cred
+    c.plugins.plugins = [Hello, MIT]
+  end
 
-    on :message do |m|
+  on :message do |m|
     msg = m.message.downcase
     words = ['illuminati', 'triangle', 'conspiracy', 'three', 'confirmed', 'secret', 'society', 'chris', 'peterson']
     if (words.any? { |word| msg.include? word })
