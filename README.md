@@ -1,4 +1,4 @@
-MITbot (A.K.A Tim the Beaver's online alter ego!)
+MITbot (A.K.A. Tim the Beaver's online alter ego!)
 ======
 
 A humble little (sometimes useful/sometimes not) IRC chat bot for the MIT Class of 2019 Freenode channel. Activities and hobbies include, but are not limited to, checking the weather in Cambridge, translating MIT course numbers for the uninitiated/forgetful, and confirming _certain_ international conspiracy organizations (think triangles) ;)
@@ -8,7 +8,7 @@ The code for MITbot is open to collaboration for all MIT 2019 students. I'll be 
 If you have any questions or just want to say hi, just send me an email at [eric at lujan.io](mailto:eric@lujan.io), message me over Facebook, or find me in the IRC room!
 
 ## The MIT License (because we have to use it, right?!)
-Copyright (c) 2014 The Massachusetts Institute of Technology's Class of 2019 
+Copyright (c) 2014 The Massachusetts Institute of Technology's Class of 2019
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

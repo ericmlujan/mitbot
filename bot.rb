@@ -178,13 +178,12 @@ class MIT
       reply = "Media Arts and Studies"
     when "sts"
       reply = "Science, Technology, and Society"
-    else 
+    else
       reply = "I don't recognize that course number or acronym"
     end
     m.reply reply 
   end
 end
-
 
 # Set some basic configuration and define the bot object.
 bot = Cinch::Bot.new do

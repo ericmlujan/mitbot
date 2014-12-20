@@ -1,11 +1,12 @@
 This help text can be sent to you via private message by typing !help in a chat room where mitbot is present.
 
 Here's a list of each command you can type, followed by a small description of how to use it:
-  
-!help    - Displays this help text.
-!ping    - Pongs you back.
-!fact    - Displays a random MIT fact.
-!cpw     - Tells you the time until CPW.
-!weather - Displays the current weather at MIT.
+
+!help         - Displays this help text.
+!ping         - Pongs you back.
+!fact         - Displays a random MIT fact.
+!cpw          - Tells you the time until CPW.
+!weather      - Displays the current weather at MIT.
+!course <num> - Tells you the name of the course described by <num>.
 
 NOTE: mitbot is a work in progress. Please send feature requests and love letters to eric@lujan.io.
