@@ -64,7 +64,7 @@ class MIT
   match(/fact$/, method: :fact)
   match(/cpw$/, method: :cpw)
   match(/weather$/, method: :weather)
-  match(/course$/, method: :course)
+  match(/course (.+)$/, method: :course)
 
   # Confirm that the illuminati exists
   def illuminati(m)
@@ -182,6 +182,7 @@ class MIT
       reply = "I don't recognize that course number or acronym"
     end
     m.reply reply 
+  end
 end
 
 
