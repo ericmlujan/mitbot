@@ -11,3 +11,5 @@ gem 'forecast_io'
 
 # Deployment via Capistrano
 gem 'capistrano', '~> 3.3.0'
+gem 'capistrano-bundler'
+gem 'capistrano-rvm'
