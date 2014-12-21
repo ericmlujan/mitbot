@@ -213,7 +213,7 @@ class MIT
     else
       reply = "I don't recognize that course number or acronym"
     end
-    m.reply reply 
+    m.reply reply
   end
 end
 
@@ -232,10 +232,12 @@ bot = Cinch::Bot.new do
   end
 
   on :message do |m|
-    msg = m.message.downcase
-    words = ['illuminati', 'triangle', 'conspiracy', 'three', 'confirmed', 'secret', 'society', 'chris', 'peterson']
-    if (words.any? { |word| msg.include? word })
-      m.reply "Did you hear that?!!!!! Illuminati confirmed by #{m.user.name}!"
+    unless m.user.nick.start_with?('mitbot')
+      msg = m.message.downcase
+      words = ['illuminati', 'triangle', 'conspiracy', 'three', 'confirmed', 'secret', 'society', 'chris', 'peterson']
+      if (words.any? { |word| msg.include? word })
+        m.reply "Did you hear that?!!!!! Illuminati confirmed by #{m.user.name}!"
+      end
     end
   end
 end
