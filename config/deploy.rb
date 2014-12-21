@@ -36,7 +36,6 @@ set :deploy_to, '/opt/mitbot'
 # set :keep_releases, 5
 
 namespace :deploy do
-
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
@@ -47,3 +46,6 @@ namespace :deploy do
   end
 
 end
+
+# Restart MITbot after deployment
+after 'deploy', 'deploy:restart'
