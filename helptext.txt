@@ -9,6 +9,6 @@ Here's a list of each command you can type, followed by a small description of h
 !weather      - Displays the current weather at MIT.
 !course <num> - Tells you the name of the course described by <num>.
 !gitstatus    - Displays the latest status of mitbot's development on GitHub.
-!time <name>  - Displays the local time for a chatroom user.
+!time <name>  - Displays the local time for a chatroom user, or at MIT if no <name> specified.
 
 NOTE: mitbot is a work in progress. Please send feature requests and love letters to eric@lujan.io.

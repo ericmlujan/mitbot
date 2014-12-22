@@ -67,51 +67,51 @@ class GitHub
   Repo = "mitbot"
 
   # Define a way to search for the lastest commit in a repository
-    def commit_latest(m)
-      uri = "/repos/#{User}/#{Repo}/commits" 
-      res = request(uri, Net::HTTP::Get)
-      m.reply "The latest commit on #{User}/#{Repo} is #{res[0]["sha"]}"
-      commit_search(m, Repo, res[0]["sha"])
-    end
+  def commit_latest(m)
+    uri = "/repos/#{User}/#{Repo}/commits"
+    res = request(uri, Net::HTTP::Get)
+    m.reply "The latest commit on #{User}/#{Repo} is #{res[0]["sha"]}"
+    commit_search(m, Repo, res[0]["sha"])
+  end
 
-    # Define a way to search for Git commits by ID
-    def commit_search(m, repo, id)
-      uri = "/repos/#{User}/#{repo}/commits/#{id}"
-      # Request the commit from GitHub and store the info
-      res = request(uri, Net::HTTP::Get)
-      m.reply "Git commit query for commit #{id} on #{User}/#{repo}"
-      m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
-      m.reply "Commit date: #{res["commit"]["author"]["date"]}"
-      m.reply "Commit message: #{res["commit"]["message"]}"
-      m.reply "Modified file listing:"
-      # Iterate through all file statistics
-      res["files"].each do |file|
-          m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
-      end
+  # Define a way to search for Git commits by ID
+  def commit_search(m, repo, id)
+    uri = "/repos/#{User}/#{repo}/commits/#{id}"
+    # Request the commit from GitHub and store the info
+    res = request(uri, Net::HTTP::Get)
+    m.reply "Git commit query for commit #{id} on #{User}/#{repo}"
+    m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
+    m.reply "Commit date: #{res["commit"]["author"]["date"]}"
+    m.reply "Commit message: #{res["commit"]["message"]}"
+    m.reply "Modified file listing:"
+    # Iterate through all file statistics
+    res["files"].each do |file|
+      m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
     end
+  end
 
-    # Define a generic method to communicate with GitHub's API
-    private
-    def request(uri, method, data = nil)
-        uri = URI("https://#{BaseURL}#{uri}")
-        # Create an HTTP requst
-        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-            req = method.new(uri.request_uri)
-            req.body = data
-            # Do the request and read the JSON into a variable
-            resp = http.request(req)
-            # Parse the JSON and return it as an object
-            return JSON.parse(resp.body)
-        end
+  # Define a generic method to communicate with GitHub's API
+  private
+  def request(uri, method, data = nil)
+    uri = URI("https://#{BaseURL}#{uri}")
+    # Create an HTTP requst
+    Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+      req = method.new(uri.request_uri)
+      req.body = data
+      # Do the request and read the JSON into a variable
+      resp = http.request(req)
+      # Parse the JSON and return it as an object
+      return JSON.parse(resp.body)
     end
+  end
 end
 
 class Zone
   include Cinch::Plugin
 
   # Set listeners
-  # TODO: LISTENERS
   match(/time ([^ ]+)$/, method: :localtime)
+  match(/time$/, method: :mittime)
 
   # Query the Geolocation API for time zone
   def get_timezone(host)
@@ -138,6 +138,14 @@ class Zone
     pretty_time = time_there.strftime("%l:%M %p")
     # Send that information to the IRC room
     m.reply "It is currently #{pretty_time} in #{username}'s time zone (#{zone_name})."
+  end
+
+  # Find the time at MIT
+  def mittime(m)
+    zone = Timezone::Zone.new zone: 'America/New_York'
+    mit_time = zone.time(Time.now)
+    pretty_time = mit_time.strftime("%-m/%-d/%y %-H:%-M")
+    m.reply "It is currently #{pretty_time} at MIT."
   end
 end
 
