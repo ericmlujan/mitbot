@@ -35,7 +35,7 @@ build/
 .capistrano
 
 # ignore sensitive information
-credfile
+config/credfile
 
 # Log and output files
 *.log
