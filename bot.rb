@@ -3,6 +3,7 @@ require 'net/http'
 require 'json'
 require 'time'
 require 'forecast_io'
+require 'timezone'
 
 # Calculate differences in times
 class Numeric
@@ -103,6 +104,41 @@ class GitHub
             return JSON.parse(resp.body)
         end
     end
+end
+
+class Zone
+  include Cinch::Plugin
+
+  # Set listeners
+  # TODO: LISTENERS
+  match(/time ([^ ]+)$/, method: :localtime)
+
+  # Query the Geolocation API for time zone
+  def get_timezone(host)
+    uri = URI("https://freegeoip.net/json/#{host}")
+    Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+      req = Net::HTTP::Get.new(uri.request_uri)
+      req.body = nil
+      resp = http.request(req)
+      resp = JSON.parse(resp.body)
+      return resp["time_zone"]
+    end
+  end
+
+  # Find the local time for a chat user
+  def localtime(m, username)
+    # Get the user's hostname
+    target = User(username)
+    host = target.host
+    # Find timezone of the user based on a geolocation API
+    zone_name = get_timezone(host)
+    # Calculate local time in that particular zone
+    zone = Timezone::Zone.new zone: zone_name
+    time_there = zone.time(Time.now)
+    pretty_time = time_there.strftime("%l:%M %p")
+    # Send that information to the IRC room
+    m.reply "It is currently #{pretty_time} in #{username}'s time zone (#{zone_name})."
+  end
 end
 
 # Class for MIT-specific stuff
@@ -247,7 +283,7 @@ bot = Cinch::Bot.new do
     c.realname = "Tim the Beaver"
     c.user = "mit"
     c.password = cred
-    c.plugins.plugins = [Hello, MIT, GitHub]
+    c.plugins.plugins = [Hello, MIT, GitHub, Zone]
   end
 
   on :message do |m|

@@ -34,6 +34,7 @@ GEM
       colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    timezone (0.3.7)
 
 PLATFORMS
   ruby
@@ -45,3 +46,4 @@ DEPENDENCIES
   cinch
   daemons
   forecast_io
+  timezone
