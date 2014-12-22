@@ -33,8 +33,6 @@ class Hello
   # Define string patterns and their corresponding methods
   match(/help$/, method: :help)
   match(/ping$/, method: :ping)
-  match(/gitstatus$/, method: :gitstatus)
-  match(/source$/, method: :source)
 
   # Define the help method
   def help(m)
@@ -54,36 +52,56 @@ class Hello
   def ping(m)
     m.reply "Tim the Beaver here, reporting for duty!"
   end
+end
 
-  def source(m)
-    file = File.expand_path(__FILE__)
-    source_text = File.open(file, "r")
-    source_text.each_line do |line|
-      m.user.send line
-    end
-    source_text.close
-  end
+# Class for GitHub querying
+class GitHub
+  inclue Cinch::Plugin
+  # Set listeners
+  match(/gitstatus$/, method: :commit_latest)
 
-  def gitstatus(m)
-    begin
-      show_text = `git show -s`
-      unless $? == 0
-        m.user.send "error running git"
-      end
-      status_text = `git status`
-      unless $? == 0
-        m.user.send "error running git"
-      end
-      show_text.each_line do |line|
-        m.user.send line
-      end
-      status_text.each_line do |line|
-        m.user.send line
-      end
-    rescue
-      m.user.send "no git program"
+  # Define the MITBot repository
+  User = "ericluwolf"
+  Repo = "mitbot"
+
+  # Define a way to search for the lastest commit in a repository
+    def commit_latest(m)
+      uri = "/repos/#{User}/#{Repo}/commits" 
+      res = request(uri, Net::HTTP::Get)
+      m.reply "The latest commit on #{User}/#{Repo} is #{res[0]["sha"]}"
+      commit_search(m, Repo, res[0]["sha"])
     end
-  end
+
+    # Define a way to search for Git commits by ID
+    def commit_search(m, repo, id)
+      uri = "/repos/#{User}/#{repo}/commits/#{id}"
+      # Request the commit from GitHub and store the info
+      res = request(uri, Net::HTTP::Get)
+      m.reply "Git commit query for commit #{id} on #{User}/#{repo}"
+      m.reply "Commit author: #{res["commit"]["author"]["name"]} <#{res["commit"]["author"]["email"]}>"
+      m.reply "Commit date: #{res["commit"]["author"]["date"]}"
+      m.reply "Commit message: #{res["commit"]["message"]}"
+      m.reply "Modified file listing:"
+      # Iterate through all file statistics
+      res["files"].each do |file|
+          m.reply "#{file["filename"]} - #{file["changes"]} changes (#{file["additions"]}+, #{file["deletions"]}-)"
+      end
+    end
+
+    # Define a generic method to communicate with GitHub's API
+    private
+    def request(uri, method, data = nil)
+        uri = URI("https://#{BaseURL}#{uri}")
+        # Create an HTTP requst
+        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+            req = method.new(uri.request_uri)
+            req.body = data
+            # Do the request and read the JSON into a variable
+            resp = http.request(req)
+            # Parse the JSON and return it as an object
+            return JSON.parse(resp.body)
+        end
+    end
 end
 
 # Class for MIT-specific stuff
@@ -228,7 +246,7 @@ bot = Cinch::Bot.new do
     c.realname = "Tim the Beaver"
     c.user = "mit"
     c.password = cred
-    c.plugins.plugins = [Hello, MIT]
+    c.plugins.plugins = [Hello, MIT, GitHub]
   end
 
   on :message do |m|
