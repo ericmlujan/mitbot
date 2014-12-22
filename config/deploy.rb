@@ -47,7 +47,7 @@ namespace :deploy do
 end
 
 # Link in the password file
-before 'deploy:started', 'deploy:simlink'
+before 'deploy:started', 'deploy:symlink'
 
 # Restart MITbot after deployment
 after 'deploy', 'deploy:restart'

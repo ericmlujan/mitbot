@@ -22,6 +22,6 @@ namespace :deploy do
 
 	desc "Make symlink for super-secret IRC password" 
 	task :symlink do
-  		run "ln -nfs #{shared_path}/config/credfile #{release_path}/config/credfile" 
+  		execute "ln -nfs #{shared_path}/config/credfile #{release_path}/config/credfile" 
 	end
 end
