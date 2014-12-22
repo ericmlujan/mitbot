@@ -56,7 +56,7 @@ end
 
 # Class for GitHub querying
 class GitHub
-  inclue Cinch::Plugin
+  include Cinch::Plugin
   # Set listeners
   match(/gitstatus$/, method: :commit_latest)
 
