@@ -61,6 +61,7 @@ class GitHub
   match(/gitstatus$/, method: :commit_latest)
 
   # Define the MITBot repository
+  BaseURL = "api.github.com"
   User = "ericluwolf"
   Repo = "mitbot"
 
