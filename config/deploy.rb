@@ -35,6 +35,8 @@ set :deploy_to, '/opt/mitbot'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :linked_files, %w{config/credfile}
+
 namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -45,9 +47,6 @@ namespace :deploy do
     end
   end
 end
-
-# Link in the password file
-before 'deploy:started', 'deploy:symlink'
 
 # Restart MITbot after deployment
 after 'deploy', 'deploy:restart'

@@ -221,7 +221,7 @@ end
 bot = Cinch::Bot.new do
   configure do |c|
     pwd = File.dirname( File.expand_path(__FILE__))
-    cred = File.open(pwd + "/credfile", &:readline)
+    cred = File.open(pwd + "/config/credfile", &:readline)
     c.server = "irc.freenode.net"
     c.channels = ["#mit2019"]
     c.nick = "mitbot"
