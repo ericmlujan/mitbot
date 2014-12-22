@@ -8,5 +8,6 @@ Here's a list of each command you can type, followed by a small description of h
 !cpw          - Tells you the time until CPW.
 !weather      - Displays the current weather at MIT.
 !course <num> - Tells you the name of the course described by <num>.
+!gitstatus    - Displays the latest status of mitbot's development on GitHub.
 
 NOTE: mitbot is a work in progress. Please send feature requests and love letters to eric@lujan.io.
