@@ -36,6 +36,8 @@ set :deploy_to, '/opt/mitbot'
 # set :keep_releases, 5
 
 set :default_env, { rvm_bin_path: '~/.rvm/bin' }
+set :linked_files, %w{config/credfile}
+
 namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
